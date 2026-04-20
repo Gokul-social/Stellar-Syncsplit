@@ -1,23 +1,25 @@
 <div align="center">
   <br />
-  <h1>✨ SYNC_SPLIT PROTOCOL</h1>
+  <h1>SYNC_SPLIT PROTOCOL</h1>
   <p>
     <strong>Cryptographic precision for splitting bills on the Stellar Network.</strong>
+  </p>
+  
+  <p>
+    <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Stellar-000000.svg?style=for-the-badge&logo=Stellar&logoColor=white" alt="Stellar" />
   </p>
   <br />
 </div>
 
-## 🌌 Overview
-
-**SYNC_SPLIT** is a production-grade, visually stunning Web3 React application that allows users to seamlessly split expenses using **XLM** (Stellar Lumens) on the Stellar Testnet. 
-
-Built with an intense "Kinetic Midnight" aesthetic featuring custom glassmorphism, dynamic animations, and tonal boundary mapping, it abandons standard UI conventions for a truly native, next-gen Web3 experience.
+> **SYNC_SPLIT** is a production-grade Web3 application designed to seamlessly divide expenses using XLM on the Stellar Testnet. Embracing a "Kinetic Midnight" aesthetic, the interface utilizes custom glassmorphism, fluid animations, and tonal boundary mapping to deliver a native, next-generation decentralized experience.
 
 ---
 
-## 🏗 System Architecture
+### System Architecture
 
-The application is fully decentralized on the client-side, relying entirely on the robust open-source infrastructure provided by the Stellar Development Foundation.
+The application operates entirely on the client side, leveraging the robust, open-source infrastructure of the Stellar Development Foundation to ensure full decentralization and reliability.
 
 ```mermaid
 graph TD
@@ -25,19 +27,19 @@ graph TD
     classDef wallet fill:#fbabff,stroke:#ae05c6,stroke-width:2px,color:#131318;
     classDef network fill:#4edea2,stroke:#007650,stroke-width:2px,color:#131318;
 
-    subgraph Client [Client-Side App]
-        UI[React UI + Tailwind v4 + Motion]:::client
-        Hooks[React Hooks Stateful Logic]:::client
-        SDK[@stellar/stellar-sdk]:::client
+    subgraph Client ["Client-Side App"]
+        UI["React UI + Tailwind v4 + Motion"]:::client
+        Hooks["React Hooks Stateful Logic"]:::client
+        SDK["@stellar/stellar-sdk"]:::client
     end
 
-    subgraph Extension [Local Node Management]
-        Freighter[Freighter Browser Extension]:::wallet
+    subgraph Extension ["Local Node Management"]
+        Freighter["Freighter Browser Extension"]:::wallet
     end
 
-    subgraph Stellar [Stellar Infrastructure]
-        Horizon[Horizon REST API Testnet]:::network
-        Core[Stellar Core Consenus]:::network
+    subgraph Stellar ["Stellar Infrastructure"]
+        Horizon["Horizon REST API Testnet"]:::network
+        Core["Stellar Core Consenus"]:::network
     end
 
     UI <--> |State & Events| Hooks
@@ -54,9 +56,9 @@ graph TD
 
 ---
 
-## ⚡ Transaction Flow Pipeline
+### Transaction Flow Pipeline
 
-SYNC_SPLIT utilizes a secure, un-opinionated transaction flow. Private keys are never touched or handled by the React application; all signing occurs safely inside the Freighter Wallet isolation zone.
+Security is paramount. SYNC_SPLIT utilizes an un-opinionated transaction flow where private keys remain strictly isolated. All signing operations occur safely within the Freighter Wallet environment, ensuring the React layer never touches sensitive cryptographic data.
 
 ```mermaid
 sequenceDiagram
@@ -85,29 +87,31 @@ sequenceDiagram
 
 ---
 
-## 🚀 Key Features
+### Protocol Features
 
-- **Freighter Wallet Integration:** Native authentication, network detection, and transaction signing.
-- **Dynamic Split Calculator:** Support for Equal, Exact, and Proportional (Shares) distribution math.
-- **Smart Validation:** Rigorous `StrKey` verification to prevent loss of funds to arbitrary strings.
-- **Real-Time Network Sync:** Continuous Horizon polling for accurate XLM balance resolution.
-- **Fluid Motion Sequences:** `motion/react` spring-physics powered page transitions, layout morphs, and interactive component feedback loops.
-- **Stellar Testnet Default:** Safe, zero-cost sandbox environment.
+* **Freighter Integration:** Native authentication, automatic network detection, and secure transaction signing.
+* **Dynamic Distribution:** Support for Equal, Exact, and Proportional (Shares) split mathematics.
+* **Smart Validation:** Rigorous `StrKey` verification prevents the loss of funds to invalid or arbitrary addresses.
+* **Real-Time Sync:** Continuous Horizon API polling guarantees accurate, up-to-the-second XLM balance resolution.
+* **Fluid Motion Sequences:** Powered by `motion/react` spring-physics, delivering seamless page transitions, layout morphs, and interactive feedback loops.
+* **Zero-Cost Sandbox:** Default configuration routes to the Stellar Testnet for safe, cost-free exploration.
 
-## 🛠 Technology Stack
+---
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Core UI** | React (Vite) | High performance VDOM rendering |
+### Technology Stack
+
+| Layer | Technology | Function |
+| :--- | :--- | :--- |
+| **Core UI** | React (Vite) | High-performance VDOM rendering |
 | **Styling** | Tailwind CSS v4 | CSS-first `@theme` design token management |
-| **Animation** | `motion` (fka Framer Motion) | GPU-accelerated spring animations |
+| **Animation** | `motion` | GPU-accelerated spring animations |
 | **Blockchain** | `@stellar/stellar-sdk` | XDR encoding, Tx building, `StrKey` validation |
 | **Wallet Protocol** | `@stellar/freighter-api` | Zero-trust private key abstractions |
 | **Routing** | React Router v7 | Seamless SPA transitions |
 
 ---
 
-## 💻 Local Development
+### Local Development
 
 Ensure you have [Node.js](https://nodejs.org/) (v18+) and npm installed.
 
@@ -127,7 +131,7 @@ npm run dev
 To test payments locally without spending real money:
 1. Install the [Freighter Browser Extension](https://www.freighter.app/).
 2. Change your network inside Freighter to **Testnet**.
-3. Use the [Stellar Laboratory Friendbot](https://laboratory.stellar.org/#account-creator?network=test) to fund your generated testnet address with free XLM!
+3. Use the [Stellar Laboratory Friendbot](https://laboratory.stellar.org/#account-creator?network=test) to fund your generated testnet address with free XLM.
 
 ---
 
