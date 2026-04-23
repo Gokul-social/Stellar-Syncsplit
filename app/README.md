@@ -7,7 +7,7 @@
   <br />
 </div>
 
-## 🌌 Overview
+## Overview
 
 **SYNC_SPLIT** is a production-grade, visually stunning Web3 React application that allows users to seamlessly split expenses using **XLM** (Stellar Lumens) on the Stellar Testnet. 
 
@@ -54,7 +54,7 @@ graph TD
 
 ---
 
-## ⚡ Transaction Flow Pipeline
+##  Transaction Flow Pipeline
 
 SYNC_SPLIT utilizes a secure, un-opinionated transaction flow. Private keys are never touched or handled by the React application; all signing occurs safely inside the Freighter Wallet isolation zone.
 
@@ -85,7 +85,7 @@ sequenceDiagram
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - **Freighter Wallet Integration:** Native authentication, network detection, and transaction signing.
 - **Dynamic Split Calculator:** Support for Equal, Exact, and Proportional (Shares) distribution math.
@@ -132,5 +132,5 @@ To test payments locally without spending real money:
 ---
 
 <div align="center">
-  <p>Built with 🩵 on <strong>Stellar</strong>.</p>
+  <p>Built with passion on <strong>Stellar</strong>.</p>
 </div>
