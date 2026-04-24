@@ -89,6 +89,14 @@ CLI           : stellar-cli v23.0.1
     <td><img src="./screenshots/05_receive_assets.png" alt="Receive Assets QR Code" width="100%"/></td>
     <td><img src="./screenshots/06_wallet_options.png" alt="Wallet Options" width="100%"/></td>
   </tr>
+  <tr>
+    <td align="center"><b>Deployed Transaction</b></td>
+    <td align="center"><b>Smart Contract Deployment Proof</b></td>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/07_deployed_transaction.png" alt="Deployed Transaction" width="100%"/></td>
+    <td><img src="./screenshots/08_contract_deployment.png" alt="Contract Deployment Proof" width="100%"/></td>
+  </tr>
 </table>
 
 ---
