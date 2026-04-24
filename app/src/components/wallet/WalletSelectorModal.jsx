@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const WALLETS = [
   {
-    id: 'Freighter',
+    id: 'freighter',
     name: 'Freighter',
     description: 'Popular Stellar browser extension',
     icon: 'account_balance_wallet',
@@ -10,7 +10,7 @@ const WALLETS = [
     installUrl: 'https://www.freighter.app/',
   },
   {
-    id: 'xBull',
+    id: 'xbull',
     name: 'xBull Wallet',
     description: 'Multi-platform Stellar wallet',
     icon: 'shield',
@@ -18,7 +18,7 @@ const WALLETS = [
     installUrl: 'https://xbull.app/',
   },
   {
-    id: 'Albedo',
+    id: 'albedo',
     name: 'Albedo',
     description: 'Web-based Stellar signer',
     icon: 'language',

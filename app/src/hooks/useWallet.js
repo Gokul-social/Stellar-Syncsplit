@@ -5,6 +5,7 @@ import { truncateAddress, NETWORK_PASSPHRASE } from '../utils/stellar';
  * Multi-wallet hook powered by StellarWalletsKit.
  *
  * Supports Freighter, xBull, and Albedo via unified API.
+ * Uses productId values: 'freighter', 'xbull', 'albedo'
  *
  * Returns:
  *  - publicKey, truncatedAddr, walletName
@@ -34,11 +35,12 @@ export function useWallet() {
       try {
         const { StellarWalletsKit } = await import('@creit-tech/stellar-wallets-kit/sdk');
         const { defaultModules } = await import('@creit-tech/stellar-wallets-kit/modules/utils');
-        const { SwkAppDarkTheme } = await import('@creit-tech/stellar-wallets-kit/types');
+
+        const modules = defaultModules();
 
         StellarWalletsKit.init({
-          theme: SwkAppDarkTheme,
-          modules: defaultModules(),
+          modules,
+          network: NETWORK_PASSPHRASE,
         });
 
         kitRef.current = StellarWalletsKit;
@@ -48,7 +50,8 @@ export function useWallet() {
         const savedWallet = localStorage.getItem('syncsplit_wallet');
         if (savedWallet) {
           try {
-            const { address } = await StellarWalletsKit.getAddress();
+            StellarWalletsKit.setWallet(savedWallet);
+            const { address } = await StellarWalletsKit.getAddress({ skipRequestAccess: true });
             if (address) {
               setPublicKey(address);
               setWalletName(savedWallet);
@@ -81,7 +84,7 @@ export function useWallet() {
           const { address } = await freighterApi.getAddress();
           if (address) {
             setPublicKey(address);
-            setWalletName('Freighter');
+            setWalletName('freighter');
             setIsConnected(true);
           }
         } catch {
@@ -93,32 +96,35 @@ export function useWallet() {
     }
   };
 
-  // ─── Connect Wallet ─────────────────────────────────────────────────────
+  // ─── Connect with specific wallet from modal ────────────────────────────
 
-  const connect = useCallback(async (preferredWallet) => {
+  const connectWithWallet = useCallback(async (walletId) => {
     setConnecting(true);
     setError(null);
+    setModalOpen(false);
 
     try {
       if (kitRef.current) {
-        // Use StellarWalletsKit
         const SWK = kitRef.current;
-        const { address } = await SWK.getAddress();
 
+        // Set the active wallet module by productId
+        SWK.setWallet(walletId);
+
+        // Request address from the selected wallet
+        const { address } = await SWK.getAddress();
         if (address) {
           setPublicKey(address);
           setIsConnected(true);
-          const name = preferredWallet || 'Wallet';
-          setWalletName(name);
-          localStorage.setItem('syncsplit_wallet', name);
+          setWalletName(walletId);
+          localStorage.setItem('syncsplit_wallet', walletId);
         }
       } else {
-        // Fallback to direct Freighter
+        // Fallback — try direct Freighter API
         const freighterApi = await import('@stellar/freighter-api');
         const connected = await freighterApi.isConnected();
 
-        if (!connected) {
-          setError('No wallet detected. Please install Freighter, xBull, or Albedo.');
+        if (!connected || !connected.isConnected) {
+          setError('Freighter wallet not detected. Please install it.');
           return;
         }
 
@@ -126,22 +132,28 @@ export function useWallet() {
         if (address) {
           setPublicKey(address);
           setIsConnected(true);
-          setWalletName('Freighter');
-          localStorage.setItem('syncsplit_wallet', 'Freighter');
+          setWalletName('freighter');
+          localStorage.setItem('syncsplit_wallet', 'freighter');
         }
       }
     } catch (err) {
-      const msg = err?.message || '';
-      if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancelled')) {
+      const msg = err?.message || String(err);
+      if (msg.includes('not connected') || msg.includes('not installed') || msg.includes('not available')) {
+        setError(`${walletId} is not installed or not connected. Please install it and try again.`);
+      } else if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancelled')) {
         setError('Connection request was rejected.');
-      } else if (msg.includes('not installed') || msg.includes('not found')) {
-        setError('Wallet not found. Please install a Stellar wallet extension.');
       } else {
-        setError(msg || 'Failed to connect wallet.');
+        setError(msg || `Failed to connect ${walletId}.`);
       }
     } finally {
       setConnecting(false);
     }
+  }, []);
+
+  // ─── Simple connect (picks first available or opens modal) ─────────────
+
+  const connect = useCallback(async () => {
+    setModalOpen(true);
   }, []);
 
   // ─── Disconnect ─────────────────────────────────────────────────────────
@@ -154,7 +166,7 @@ export function useWallet() {
     localStorage.removeItem('syncsplit_wallet');
   }, []);
 
-  // ─── Open Wallet Selection Modal ────────────────────────────────────────
+  // ─── Modal Controls ────────────────────────────────────────────────────
 
   const openModal = useCallback(() => {
     setModalOpen(true);
@@ -195,47 +207,6 @@ export function useWallet() {
       throw err;
     }
   }, [isConnected, publicKey]);
-
-  // ─── Connect with specific wallet from modal ────────────────────────────
-
-  const connectWithWallet = useCallback(async (walletId) => {
-    setConnecting(true);
-    setError(null);
-    setModalOpen(false);
-
-    try {
-      if (kitRef.current) {
-        const SWK = kitRef.current;
-
-        // If there's a setWallet method, use it
-        if (typeof SWK.setWallet === 'function') {
-          SWK.setWallet(walletId);
-        }
-
-        const { address } = await SWK.getAddress();
-        if (address) {
-          setPublicKey(address);
-          setIsConnected(true);
-          setWalletName(walletId);
-          localStorage.setItem('syncsplit_wallet', walletId);
-        }
-      } else {
-        // Fallback — just try Freighter
-        await connect('Freighter');
-      }
-    } catch (err) {
-      const msg = err?.message || '';
-      if (msg.includes('not installed') || msg.includes('not found')) {
-        setError(`${walletId} is not installed. Please install it from the browser extension store.`);
-      } else if (msg.includes('User declined') || msg.includes('rejected')) {
-        setError('Connection was rejected.');
-      } else {
-        setError(msg || `Failed to connect ${walletId}.`);
-      }
-    } finally {
-      setConnecting(false);
-    }
-  }, [connect]);
 
   return {
     publicKey,
