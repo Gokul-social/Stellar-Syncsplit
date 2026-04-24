@@ -64,17 +64,17 @@ CLI           : stellar-cli v23.0.1
   </tr>
   <tr>
     <td align="center"><b>📜 Transaction History</b></td>
-    <td align="center"><b>⚙️ Settings</b></td>
+    <td align="center"><b>📜 Deployed Contract — Stellar Expert</b></td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/0d4f988f-ec3c-4094-be20-41567f064b26" alt="Transaction History" width="100%"/></td>
-    <td><img src="https://github.com/user-attachments/assets/0ce6c74d-d527-42a2-97ed-a93b4c2d4de4" alt="Settings" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/0ce6c74d-d527-42a2-97ed-a93b4c2d4de4" alt="Deployed Contract on Stellar Expert" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><b>🔐 Multi-Wallet Selector</b></td>
+    <td align="center" colspan="2"><b>✅ Transaction Confirmation — Stellar Expert</b></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><img src="https://github.com/user-attachments/assets/7da95354-3ed9-405c-89d1-f2fe991b7418" alt="Wallet Selector Modal" width="60%"/></td>
+    <td align="center" colspan="2"><img src="https://github.com/user-attachments/assets/7da95354-3ed9-405c-89d1-f2fe991b7418" alt="Transaction Confirmation on Stellar Expert" width="60%"/></td>
   </tr>
 </table>
 
