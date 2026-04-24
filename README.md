@@ -43,25 +43,42 @@ Network       : Test SDF Network ; September 2015
 SDK           : soroban-sdk v22.0.0
 CLI           : stellar-cli v23.0.1
 ```
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>🏠 Landing Page</b></td>
+    <td align="center"><b>📊 Dashboard — Split Calculator</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/45680289-b3a5-4d74-ba1e-ba7b0b441830" alt="Landing Page" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/40a51082-265a-4f73-8d55-dfd2d3a1c76b" alt="Dashboard" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>💰 Wallet & Portfolio</b></td>
+    <td align="center"><b>💸 Send Transaction</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/3b697ff8-603d-496f-b5a2-d24c81025a4c" alt="Wallet Portfolio" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/dc8ab198-588c-4e8a-92eb-c05e31904f77" alt="Send Transaction" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>📜 Transaction History</b></td>
+    <td align="center"><b>⚙️ Settings</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/0d4f988f-ec3c-4094-be20-41567f064b26" alt="Transaction History" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/0ce6c74d-d527-42a2-97ed-a93b4c2d4de4" alt="Settings" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><b>🔐 Multi-Wallet Selector</b></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="https://github.com/user-attachments/assets/7da95354-3ed9-405c-89d1-f2fe991b7418" alt="Wallet Selector Modal" width="60%"/></td>
+  </tr>
+</table>
+
 ---
-## Screen Shots
-
-<img width="1440" height="900" alt="Screenshot 2026-04-24 at 22 13 09" src="https://github.com/user-attachments/assets/45680289-b3a5-4d74-ba1e-ba7b0b441830" />
-
-<img width="1440" height="900" alt="Screenshot 2026-04-24 at 22 16 32" src="https://github.com/user-attachments/assets/40a51082-265a-4f73-8d55-dfd2d3a1c76b" />
-
-<img width="1440" height="900" alt="Screenshot 2026-04-24 at 22 13 31" src="https://github.com/user-attachments/assets/3b697ff8-603d-496f-b5a2-d24c81025a4c" />
-
-<img width="1440" height="900" alt="Screenshot 2026-04-24 at 22 16 05" src="https://github.com/user-attachments/assets/dc8ab198-588c-4e8a-92eb-c05e31904f77" />
-<img width="1440" height="900" alt="Screenshot 2026-04-24 at 22 13 47" src="https://github.com/user-attachments/assets/0d4f988f-ec3c-4094-be20-41567f064b26" />
-alt="Screenshot 2026-04-24 at 22 13 09" src="https://github.com/user-attachments/assets/45680289-b3a5-4d74-ba1e-ba7b0b441830" />
-<img width="1440" height="817" alt="Screenshot 2026-04-24 at 21 51 38" src="https://github.com/user-attachments/assets/0ce6c74d-d527-42a2-97ed-a93b4c2d4de4" />
-<img width="1440" height="812" alt="Screenshot 2026-04-24 at 21 52 04" src="https://github.com/user-attachments/assets/7da95354-3ed9-405c-89d1-f2fe991b7418" />
-
-
-
-
-
 
 
 ---
