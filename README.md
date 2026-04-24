@@ -25,6 +25,22 @@
 
 ---
 
+## Table of Contents
+
+- [Live Deployment](#live-deployment)
+- [Screenshots](#screenshots)
+- [Demo Video](#demo-video)
+- [System Architecture](#system-architecture)
+- [Smart Contract Transaction Flow](#smart-contract-transaction-flow)
+- [Contract Functions](#contract-functions)
+- [Protocol Features](#protocol-features)
+- [Technology Stack](#technology-stack)
+- [Quick Start](#quick-start)
+- [Contract Deployment](#contract-deployment-optional)
+- [Project Structure](#project-structure)
+
+---
+
 ## Live Deployment
 
 | Component | URL | Status |
