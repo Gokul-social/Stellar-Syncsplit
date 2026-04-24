@@ -40,3 +40,4 @@ Thumbs.db
 # ─── Coverage / Testing ───────────────────────────────────────────────────────
 coverage/
 .vercel
+.env*.local
