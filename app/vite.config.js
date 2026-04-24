@@ -11,4 +11,22 @@ export default defineConfig({
     port: 5173,
     open: true,
   },
+  define: {
+    // Polyfills needed by @stellar/stellar-sdk and wallet kit
+    'process.env': {},
+    global: 'globalThis',
+  },
+  resolve: {
+    alias: {
+      // Buffer polyfill for browser
+      buffer: 'buffer',
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
+  },
 })

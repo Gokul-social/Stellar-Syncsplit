@@ -1,7 +1,10 @@
 import { StrKey } from '@stellar/stellar-sdk';
 
-export const HORIZON_URL = 'https://horizon-testnet.stellar.org';
-export const NETWORK_PASSPHRASE = 'Test SDF Network ; September 2015';
+// ─── Network Configuration ───────────────────────────────────────────────────
+export const HORIZON_URL = import.meta.env.VITE_HORIZON_URL || 'https://horizon-testnet.stellar.org';
+export const SOROBAN_RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL || 'https://soroban-testnet.stellar.org';
+export const CONTRACT_ID = import.meta.env.VITE_CONTRACT_ID || '';
+export const NETWORK_PASSPHRASE = import.meta.env.VITE_NETWORK_PASSPHRASE || 'Test SDF Network ; September 2015';
 export const STELLAR_EXPERT_URL = 'https://stellar.expert/explorer/testnet';
 
 /**
@@ -35,6 +38,25 @@ export function formatXLM(amount) {
 }
 
 /**
+ * Convert stroops (i128) to XLM string for display.
+ * 1 XLM = 10,000,000 stroops
+ */
+export function stroopsToXlm(stroops) {
+  if (!stroops && stroops !== 0) return '0.00';
+  const num = typeof stroops === 'bigint' ? Number(stroops) : Number(stroops);
+  return (num / 10_000_000).toFixed(7);
+}
+
+/**
+ * Convert XLM string to stroops (i128) for contract.
+ */
+export function xlmToStroops(xlm) {
+  const num = typeof xlm === 'string' ? parseFloat(xlm) : xlm;
+  if (isNaN(num)) return 0n;
+  return BigInt(Math.round(num * 10_000_000));
+}
+
+/**
  * Get the Stellar Expert transaction URL
  */
 export function getTxExplorerUrl(txHash) {
@@ -46,4 +68,11 @@ export function getTxExplorerUrl(txHash) {
  */
 export function getAccountExplorerUrl(publicKey) {
   return `${STELLAR_EXPERT_URL}/account/${publicKey}`;
+}
+
+/**
+ * Get the Stellar Expert contract URL
+ */
+export function getContractExplorerUrl(contractId) {
+  return `${STELLAR_EXPERT_URL}/contract/${contractId}`;
 }
