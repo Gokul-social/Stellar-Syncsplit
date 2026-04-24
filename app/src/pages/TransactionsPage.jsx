@@ -5,9 +5,10 @@ import SendTransaction from '../components/transaction/SendTransaction';
 
 /**
  * Transactions page — history list with filters + send funds panel.
+ * Uses multi-wallet context from AppLayout.
  */
 export default function TransactionsPage() {
-  const wallet = useOutletContext();
+  const ctx = useOutletContext();
   const [filter, setFilter] = useState('all');
 
   const transactions = [
@@ -161,7 +162,10 @@ export default function TransactionsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <SendTransaction publicKey={wallet.publicKey} />
+            <SendTransaction
+              publicKey={ctx.publicKey}
+              signTransaction={ctx.signTransaction}
+            />
           </motion.div>
 
           {/* Network Status */}
@@ -182,11 +186,13 @@ export default function TransactionsPage() {
             </div>
             <div className="bg-surface-container p-5 rounded-2xl border border-outline-variant/10">
               <p className="text-[10px] font-black text-outline uppercase tracking-widest mb-3">
-                Network
+                Wallet
               </p>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-tertiary animate-pulse" />
-                <span className="text-lg font-headline font-bold text-on-surface">Synced</span>
+                <span className="text-lg font-headline font-bold text-on-surface">
+                  {ctx.walletName || 'None'}
+                </span>
               </div>
             </div>
           </motion.div>

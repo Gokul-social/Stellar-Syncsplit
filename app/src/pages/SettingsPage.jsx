@@ -1,11 +1,13 @@
 import { useOutletContext } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { CONTRACT_ID, truncateAddress, getContractExplorerUrl } from '../utils/stellar';
 
 /**
  * Settings page — Privacy & Security Armor.
+ * Updated with multi-wallet info and contract configuration display.
  */
 export default function SettingsPage() {
-  const wallet = useOutletContext();
+  const ctx = useOutletContext();
 
   return (
     <div className="kinetic-gradient min-h-[80vh]">
@@ -42,17 +44,17 @@ export default function SettingsPage() {
                 verified_user
               </span>
               <span className="font-headline font-bold text-on-surface">
-                Shield Status: {wallet.isConnected ? 'Active' : 'Inactive'}
+                Shield Status: {ctx.isConnected ? 'Active' : 'Inactive'}
               </span>
             </div>
             <div className="h-1 w-full bg-surface-container rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-700"
-                style={{ width: wallet.isConnected ? '94%' : '20%' }}
+                style={{ width: ctx.isConnected ? '94%' : '20%' }}
               />
             </div>
             <p className="text-xs text-outline mt-2 text-right">
-              {wallet.isConnected ? '94%' : '20%'} Protection Coverage
+              {ctx.isConnected ? '94%' : '20%'} Protection Coverage
             </p>
           </motion.div>
         </div>
@@ -78,10 +80,10 @@ export default function SettingsPage() {
               </span>
             </div>
             <h2 className="font-headline text-2xl md:text-3xl font-bold text-on-surface mb-4">
-              Freighter Wallet Security
+              Multi-Wallet Security
             </h2>
             <p className="text-on-surface-variant mb-8 max-w-md">
-              Your transactions are signed locally by the Freighter browser extension. Private keys never leave your device.
+              Transactions are signed locally by your chosen wallet extension (Freighter, xBull, or Albedo). Private keys never leave your device.
             </p>
           </div>
           <div className="flex items-center justify-between pt-6 border-t border-outline-variant/10">
@@ -119,7 +121,7 @@ export default function SettingsPage() {
           </div>
         </motion.div>
 
-        {/* Network Settings */}
+        {/* Contract Configuration */}
         <motion.div
           className="md:col-span-4 bg-surface-container-lowest/50 border border-outline-variant/10 rounded-xl p-6 md:p-8"
           initial={{ opacity: 0, y: 16 }}
@@ -127,37 +129,46 @@ export default function SettingsPage() {
           transition={{ delay: 0.3 }}
         >
           <h3 className="font-headline text-lg font-bold text-on-surface mb-6">
-            Wallet Configuration
+            Smart Contract
           </h3>
-          <ul className="space-y-6">
-            {[
-              { label: 'Auto-connect on refresh', enabled: true },
-              { label: 'Show testnet badge', enabled: true },
-              { label: 'Transaction memos', enabled: false },
-            ].map(setting => (
-              <li key={setting.label} className="flex items-center justify-between">
-                <span className="text-sm text-on-surface-variant font-medium">{setting.label}</span>
-                <div
-                  className={[
-                    'w-10 h-5 rounded-full p-1 flex items-center transition-all duration-300',
-                    setting.enabled
-                      ? 'bg-primary justify-end shadow-[0_0_10px_rgba(210,187,255,0.4)]'
-                      : 'bg-surface-container-highest',
-                  ].join(' ')}
-                >
-                  <div
-                    className={[
-                      'w-3 h-3 rounded-full',
-                      setting.enabled ? 'bg-on-primary' : 'bg-outline',
-                    ].join(' ')}
-                  />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-on-surface-variant font-medium">Status</span>
+              <div className="flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${CONTRACT_ID ? 'bg-tertiary animate-pulse' : 'bg-error'}`} />
+                <span className={`text-xs font-bold ${CONTRACT_ID ? 'text-tertiary' : 'text-error'}`}>
+                  {CONTRACT_ID ? 'Deployed' : 'Not Configured'}
+                </span>
+              </div>
+            </div>
+            {CONTRACT_ID && (
+              <>
+                <div>
+                  <span className="text-[10px] text-outline uppercase tracking-widest block mb-1">Contract ID</span>
+                  <a
+                    href={getContractExplorerUrl(CONTRACT_ID)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-mono text-primary hover:underline break-all"
+                  >
+                    {truncateAddress(CONTRACT_ID, 8, 8)}
+                  </a>
                 </div>
-              </li>
-            ))}
-          </ul>
+                <div>
+                  <span className="text-[10px] text-outline uppercase tracking-widest block mb-1">Platform</span>
+                  <span className="text-xs font-bold text-on-surface">Soroban (Stellar)</span>
+                </div>
+              </>
+            )}
+            {!CONTRACT_ID && (
+              <p className="text-xs text-outline-variant leading-relaxed">
+                Set <code className="text-primary font-mono text-[10px]">VITE_CONTRACT_ID</code> in your <code className="text-primary font-mono text-[10px]">.env</code> file. See DEPLOYMENT.md for instructions.
+              </p>
+            )}
+          </div>
         </motion.div>
 
-        {/* Sessions */}
+        {/* Active Connections */}
         <motion.div
           className="md:col-span-8 bg-surface-container-high/20 glass-panel rounded-xl overflow-hidden"
           initial={{ opacity: 0, y: 16 }}
@@ -171,8 +182,27 @@ export default function SettingsPage() {
           </div>
           <div className="space-y-1">
             {[
-              { icon: 'desktop_windows', name: 'Browser Extension (Freighter)', detail: 'Chrome • Current session', status: 'Connected', statusColor: 'text-tertiary bg-tertiary/10' },
-              { icon: 'cloud_sync', name: 'Horizon API', detail: 'horizon-testnet.stellar.org', status: 'Active', statusColor: 'text-tertiary bg-tertiary/10' },
+              {
+                icon: 'account_balance_wallet',
+                name: ctx.walletName ? `${ctx.walletName} Wallet` : 'Browser Extension',
+                detail: ctx.isConnected ? `Connected • ${ctx.truncatedAddr}` : 'Not connected',
+                status: ctx.isConnected ? 'Connected' : 'Disconnected',
+                statusColor: ctx.isConnected ? 'text-tertiary bg-tertiary/10' : 'text-outline bg-surface-container-high',
+              },
+              {
+                icon: 'cloud_sync',
+                name: 'Horizon API',
+                detail: 'horizon-testnet.stellar.org',
+                status: 'Active',
+                statusColor: 'text-tertiary bg-tertiary/10',
+              },
+              {
+                icon: 'dns',
+                name: 'Soroban RPC',
+                detail: 'soroban-testnet.stellar.org',
+                status: CONTRACT_ID ? 'Active' : 'Standby',
+                statusColor: CONTRACT_ID ? 'text-tertiary bg-tertiary/10' : 'text-outline bg-surface-container-high',
+              },
             ].map((session, i) => (
               <div
                 key={i}

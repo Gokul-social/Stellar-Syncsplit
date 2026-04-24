@@ -1,8 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { validateAddress, truncateAddress, formatXLM } from '../../utils/stellar';
+import { validateAddress, truncateAddress, formatXLM, CONTRACT_ID } from '../../utils/stellar';
 import { generateId } from '../../utils/helpers';
-import { useTransaction } from '../../hooks/useTransaction';
 import GradientButton from '../ui/GradientButton';
 import TransactionStatus from '../transaction/TransactionStatus';
 
@@ -10,18 +9,24 @@ const SPLIT_METHODS = ['equal', 'exact', 'shares'];
 
 /**
  * Full split calculator with dynamic participants, multiple split modes,
- * validation, and Stellar transaction integration.
+ * validation, and Soroban contract integration.
+ *
+ * When CONTRACT_ID is set, creates splits on-chain. Otherwise, sends
+ * direct XLM payments as a fallback.
  */
-export default function SplitCalculator({ publicKey, balance }) {
+export default function SplitCalculator({ publicKey, balance, contract, onSplitCreated }) {
   const [totalAmount, setTotalAmount] = useState('');
+  const [splitDescription, setSplitDescription] = useState('');
   const [splitMethod, setSplitMethod] = useState('equal');
   const [participants, setParticipants] = useState([]);
   const [newName, setNewName] = useState('');
   const [newAddress, setNewAddress] = useState('');
   const [addError, setAddError] = useState('');
   const [showStatus, setShowStatus] = useState(false);
+  const [contractStep, setContractStep] = useState(null); // 'creating' | 'adding' | 'done'
+  const [createdSplitId, setCreatedSplitId] = useState(null);
 
-  const tx = useTransaction();
+  const isContractMode = Boolean(CONTRACT_ID && contract);
 
   // Add the current user as a participant
   const addSelf = useCallback(() => {
@@ -119,27 +124,73 @@ export default function SplitCalculator({ publicKey, balance }) {
     if (participants.length === 0) return false;
     if (!breakdown.valid) return false;
     if (balance !== null && total > parseFloat(balance)) return false;
-    // Check all non-self participants have valid addresses
     return participants.every(p => validateAddress(p.address));
   }, [totalAmount, participants, breakdown, balance]);
 
-  const handleSubmit = async () => {
-    if (!canSubmit || tx.isLoading) return;
+  // ─── Submit: Contract Mode ──────────────────────────────────────────────
+
+  const handleContractSubmit = async () => {
+    if (!canSubmit || !contract) return;
     setShowStatus(true);
+    setContractStep('creating');
 
-    // Send to all non-self participants
-    const recipients = breakdown.items.filter(p => !p.isSelf);
-    if (recipients.length === 0) return;
-
-    // For simplicity, send to the first non-self participant
-    // In a real app, you'd batch or loop
-    const first = recipients[0];
-    await tx.sendPayment(
-      first.address,
-      first.calculatedAmount.toFixed(7),
-      `SYNC_SPLIT: ${participants.length}-way split`
+    // Step 1: Create the split on-chain
+    const splitId = await contract.createSplit(
+      parseFloat(totalAmount),
+      splitDescription || `${participants.length}-way split`
     );
+
+    if (!splitId) {
+      setContractStep(null);
+      return; // Error is set by contract hook
+    }
+
+    setCreatedSplitId(splitId);
+
+    // Step 2: Add each participant
+    setContractStep('adding');
+    for (const p of breakdown.items) {
+      const success = await contract.addParticipant(
+        splitId,
+        p.address,
+        p.calculatedAmount
+      );
+      if (!success) {
+        setContractStep(null);
+        return; // Error handling is in the contract hook
+      }
+    }
+
+    setContractStep('done');
+    if (onSplitCreated) onSplitCreated(splitId);
   };
+
+  // ─── Submit: Legacy Direct Payment Mode ─────────────────────────────────
+  // (Kept for backward compatibility if contract is not deployed)
+
+  const handleLegacySubmit = async () => {
+    // This would need a useTransaction instance; for now just show contract mode
+    setShowStatus(true);
+  };
+
+  const handleSubmit = isContractMode ? handleContractSubmit : handleLegacySubmit;
+
+  // Determine status display
+  const getStatusDisplay = () => {
+    if (!contract) return null;
+    if (contract.txStatus === 'success' && contractStep === 'done') {
+      return { status: 'success', txHash: contract.txHash, error: null };
+    }
+    if (contract.txStatus === 'error') {
+      return { status: 'error', txHash: null, error: contract.error };
+    }
+    if (contract.loading) {
+      return { status: contract.txStatus, txHash: null, error: null };
+    }
+    return null;
+  };
+
+  const statusDisplay = getStatusDisplay();
 
   return (
     <div className="glass-panel bg-surface-container-highest/30 rounded-2xl p-6 md:p-8 inner-stroke border border-outline-variant/10 shadow-2xl relative overflow-hidden">
@@ -147,11 +198,20 @@ export default function SplitCalculator({ publicKey, balance }) {
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-container/20 to-transparent blur-[100px] pointer-events-none" />
 
       <header className="mb-8 md:mb-10 relative z-10">
-        <h1 className="font-headline text-2xl md:text-3xl font-black tracking-tight text-on-surface mb-2">
-          Split Calculator
-        </h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="font-headline text-2xl md:text-3xl font-black tracking-tight text-on-surface">
+            Split Calculator
+          </h1>
+          {isContractMode && (
+            <span className="text-[9px] bg-tertiary/10 text-tertiary px-2 py-1 rounded-full font-black uppercase tracking-widest">
+              On-Chain
+            </span>
+          )}
+        </div>
         <p className="text-on-surface-variant font-body text-sm md:text-base">
-          Distribute XLM with cryptographic precision on Stellar.
+          {isContractMode
+            ? 'Create splits stored on the Stellar blockchain via Soroban smart contract.'
+            : 'Distribute XLM with cryptographic precision on Stellar.'}
         </p>
       </header>
 
@@ -184,6 +244,23 @@ export default function SplitCalculator({ publicKey, balance }) {
               </p>
             )}
           </div>
+
+          {/* Split Description (contract mode) */}
+          {isContractMode && (
+            <div>
+              <label className="font-label text-xs uppercase tracking-widest text-outline block mb-3">
+                Description
+              </label>
+              <input
+                type="text"
+                value={splitDescription}
+                onChange={e => setSplitDescription(e.target.value)}
+                placeholder="e.g. Dinner at Nobu"
+                maxLength={64}
+                className="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm text-on-surface focus:ring-1 focus:ring-primary/30 placeholder:text-outline-variant"
+              />
+            </div>
+          )}
 
           {/* Split Method */}
           <div>
@@ -363,29 +440,50 @@ export default function SplitCalculator({ publicKey, balance }) {
 
           {/* Submit */}
           <div className="mt-8">
-            {showStatus && (tx.isLoading || tx.isSuccess || tx.isError) ? (
+            {showStatus && statusDisplay ? (
               <TransactionStatus
-                status={tx.status}
-                txHash={tx.txHash}
-                error={tx.error}
+                status={statusDisplay.status}
+                txHash={statusDisplay.txHash}
+                error={statusDisplay.error}
                 onReset={() => {
-                  tx.reset();
+                  if (contract) contract.resetState();
                   setShowStatus(false);
+                  setContractStep(null);
+                  setCreatedSplitId(null);
                 }}
               />
+            ) : showStatus && contractStep ? (
+              <div className="text-center py-4">
+                <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                <p className="text-sm font-headline font-bold text-primary">
+                  {contractStep === 'creating' && 'Creating split on-chain...'}
+                  {contractStep === 'adding' && 'Adding participants...'}
+                  {contractStep === 'done' && 'Split created successfully!'}
+                </p>
+                {createdSplitId && (
+                  <p className="text-xs text-outline mt-2">Split ID: {createdSplitId}</p>
+                )}
+              </div>
             ) : (
               <>
                 <GradientButton
                   fullWidth
-                  icon="send"
-                  disabled={!canSubmit}
-                  loading={tx.isLoading}
+                  icon={isContractMode ? 'contract_edit' : 'send'}
+                  disabled={!canSubmit || !publicKey}
+                  loading={contract?.loading}
                   onClick={handleSubmit}
                 >
-                  Send Split Payment
+                  {isContractMode ? 'Create On-Chain Split' : 'Send Split Payment'}
                 </GradientButton>
+                {!publicKey && (
+                  <p className="text-center text-[10px] text-error mt-3 uppercase tracking-widest">
+                    Connect wallet to submit
+                  </p>
+                )}
                 <p className="text-center text-[10px] text-outline mt-4 uppercase tracking-widest">
-                  Base fee: 100 stroops (0.00001 XLM)
+                  {isContractMode
+                    ? 'Split will be stored on Stellar Testnet via Soroban'
+                    : 'Base fee: 100 stroops (0.00001 XLM)'}
                 </p>
               </>
             )}

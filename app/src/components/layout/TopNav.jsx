@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 /**
  * Fixed top navigation bar — matches the prototype TopAppBar.
  * Glassmorphic background with gradient SYNC_SPLIT logo.
+ * Shows active wallet name and truncated address.
  */
-export default function TopNav({ onWalletClick, isConnected, truncatedAddr }) {
+export default function TopNav({ onWalletClick, isConnected, walletName, truncatedAddr }) {
   const navItems = [
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/wallet', label: 'Wallet' },
@@ -42,13 +43,19 @@ export default function TopNav({ onWalletClick, isConnected, truncatedAddr }) {
         {/* Right Actions */}
         <div className="flex items-center gap-3">
           {isConnected && (
-            <div className="hidden sm:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/10">
+            <button
+              onClick={onWalletClick}
+              className="hidden sm:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/10 hover:border-primary/30 transition-all cursor-pointer group"
+            >
               <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse-glow" />
               <span className="text-xs font-headline font-bold text-tertiary uppercase tracking-wider">
-                Testnet
+                {walletName || 'Testnet'}
               </span>
               <span className="text-xs text-outline font-mono">{truncatedAddr}</span>
-            </div>
+              <span className="material-symbols-outlined text-outline text-sm group-hover:text-primary transition-colors">
+                unfold_more
+              </span>
+            </button>
           )}
           <button
             onClick={onWalletClick}

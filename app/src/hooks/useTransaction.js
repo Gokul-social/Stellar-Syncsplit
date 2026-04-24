@@ -6,7 +6,7 @@ import {
   Asset,
   Memo,
 } from '@stellar/stellar-sdk';
-import { HORIZON_URL } from '../utils/stellar';
+import { HORIZON_URL, NETWORK_PASSPHRASE } from '../utils/stellar';
 
 /**
  * Transaction states: idle → building → signing → submitting → success | error
@@ -21,11 +21,17 @@ const STATUS = {
 };
 
 /**
- * Hook to build, sign, and submit Stellar transactions via Freighter.
+ * Hook to build, sign, and submit Stellar transactions.
+ *
+ * Now uses the unified signTransaction function from useWallet (StellarWalletsKit)
+ * instead of direct Freighter API calls.
+ *
+ * @param {Function} signTransaction - Sign function from useWallet
+ * @param {string} publicKey - Currently connected public key
  *
  * Returns: { sendPayment, status, txHash, error, reset }
  */
-export function useTransaction() {
+export function useTransaction(signTransaction, publicKey) {
   const [status, setStatus] = useState(STATUS.IDLE);
   const [txHash, setTxHash] = useState(null);
   const [error, setError] = useState(null);
@@ -37,7 +43,7 @@ export function useTransaction() {
   }, []);
 
   /**
-   * Send XLM from the connected Freighter wallet.
+   * Send XLM from the connected wallet (any wallet via StellarWalletsKit).
    *
    * @param {string} destination — recipient Stellar address
    * @param {string} amount — XLM amount as string
@@ -49,24 +55,27 @@ export function useTransaction() {
     setError(null);
 
     try {
-      // 1. Get sender's public key from Freighter
-      const freighterApi = await import('@stellar/freighter-api');
-      const { address: senderKey } = await freighterApi.getAddress();
-
-      if (!senderKey) {
-        throw new Error('No wallet connected. Please connect Freighter first.');
+      if (!publicKey) {
+        throw new Error('No wallet connected. Please connect a wallet first.');
       }
 
-      // 2. Load sender account from Horizon
-      const accountResponse = await fetch(`${HORIZON_URL}/accounts/${senderKey}`);
+      if (!signTransaction) {
+        throw new Error('Wallet sign function not available. Please reconnect your wallet.');
+      }
+
+      // 1. Load sender account from Horizon
+      const accountResponse = await fetch(`${HORIZON_URL}/accounts/${publicKey}`);
       if (!accountResponse.ok) {
-        throw new Error('Failed to load sender account. Is it funded?');
+        if (accountResponse.status === 404) {
+          throw new Error('Account not funded. Use Friendbot to fund your testnet account.');
+        }
+        throw new Error('Failed to load sender account.');
       }
       const accountData = await accountResponse.json();
 
-      // 3. Build the transaction
+      // 2. Build the transaction
       const account = {
-        accountId: () => senderKey,
+        accountId: () => publicKey,
         sequenceNumber: () => accountData.sequence,
         incrementSequenceNumber: () => {
           accountData.sequence = (BigInt(accountData.sequence) + 1n).toString();
@@ -75,7 +84,7 @@ export function useTransaction() {
 
       const builder = new TransactionBuilder(account, {
         fee: '100',
-        networkPassphrase: Networks.TESTNET,
+        networkPassphrase: NETWORK_PASSPHRASE,
       });
 
       builder.addOperation(
@@ -93,14 +102,14 @@ export function useTransaction() {
       builder.setTimeout(180);
       const transaction = builder.build();
 
-      // 4. Sign via Freighter
+      // 3. Sign via wallet (StellarWalletsKit or Freighter fallback)
       setStatus(STATUS.SIGNING);
-      const { signedTxXdr } = await freighterApi.signTransaction(
-        transaction.toXDR(),
-        { networkPassphrase: Networks.TESTNET }
-      );
+      const { signedTxXdr } = await signTransaction(transaction.toXDR(), {
+        networkPassphrase: NETWORK_PASSPHRASE,
+        address: publicKey,
+      });
 
-      // 5. Submit to Horizon
+      // 4. Submit to Horizon
       setStatus(STATUS.SUBMITTING);
       const submitResponse = await fetch(`${HORIZON_URL}/transactions`, {
         method: 'POST',
@@ -121,10 +130,22 @@ export function useTransaction() {
       setTxHash(submitData.hash);
       setStatus(STATUS.SUCCESS);
     } catch (err) {
-      setError(err.message || 'Transaction failed');
+      const msg = err.message || 'Transaction failed';
+
+      // User-friendly error mapping
+      if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancelled')) {
+        setError('Transaction was rejected in your wallet.');
+      } else if (msg.includes('op_underfunded') || msg.includes('insufficient')) {
+        setError('Insufficient XLM balance for this transaction.');
+      } else if (msg.includes('op_no_destination')) {
+        setError('Destination account does not exist. It may need to be funded first.');
+      } else {
+        setError(msg);
+      }
+
       setStatus(STATUS.ERROR);
     }
-  }, []);
+  }, [publicKey, signTransaction]);
 
   return {
     sendPayment,

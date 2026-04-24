@@ -6,17 +6,17 @@ import GradientButton from '../ui/GradientButton';
 import TransactionStatus from './TransactionStatus';
 
 /**
- * Send Funds card — port of the Transactions prototype's right panel.
- * Adapted for Stellar (XLM only).
+ * Send Funds card — uses multi-wallet signTransaction from context.
+ * Adapted for any Stellar wallet via StellarWalletsKit.
  */
-export default function SendTransaction({ publicKey }) {
+export default function SendTransaction({ publicKey, signTransaction }) {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [memo, setMemo] = useState('');
   const [showStatus, setShowStatus] = useState(false);
 
   const { balance } = useBalance(publicKey);
-  const tx = useTransaction();
+  const tx = useTransaction(signTransaction, publicKey);
 
   const isValidRecipient = useMemo(() => {
     if (!recipient.trim()) return null; // undetermined
@@ -35,9 +35,11 @@ export default function SendTransaction({ publicKey }) {
       isValidRecipient === true &&
       parsedAmount > 0 &&
       !insufficientBalance &&
-      !tx.isLoading
+      !tx.isLoading &&
+      !!publicKey &&
+      !!signTransaction
     );
-  }, [isValidRecipient, parsedAmount, insufficientBalance, tx.isLoading]);
+  }, [isValidRecipient, parsedAmount, insufficientBalance, tx.isLoading, publicKey, signTransaction]);
 
   const handlePaste = async () => {
     try {
@@ -208,7 +210,7 @@ export default function SendTransaction({ publicKey }) {
             loading={tx.isLoading}
             onClick={handleSubmit}
           >
-            Authorize Transaction
+            {!publicKey ? 'Connect Wallet First' : 'Authorize Transaction'}
           </GradientButton>
         </div>
       </div>

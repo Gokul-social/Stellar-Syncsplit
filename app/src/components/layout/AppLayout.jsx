@@ -2,23 +2,21 @@ import { Outlet } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import TopNav from './TopNav';
 import SideNav from './SideNav';
+import WalletSelectorModal from '../wallet/WalletSelectorModal';
+import TransactionStatusPanel from '../transaction/TransactionStatusPanel';
 import { useWallet } from '../../hooks/useWallet';
+import { useContract } from '../../hooks/useContract';
+import { useEvents } from '../../hooks/useEvents';
 
 /**
  * App layout shell: TopNav + SideNav + content area.
- * Fixes the sidebar overlap with proper `md:pl-64 pt-24` spacing.
- * Includes mobile bottom navigation bar.
+ * Manages multi-wallet state and contract hooks at the layout level.
+ * Includes wallet selector modal and transaction status panel.
  */
 export default function AppLayout() {
   const wallet = useWallet();
-
-  const handleWalletClick = () => {
-    if (wallet.isConnected) {
-      wallet.disconnect();
-    } else {
-      wallet.connect();
-    }
-  };
+  const contract = useContract(wallet.publicKey, wallet.signTransaction);
+  const { events, latestEvent, loading: eventsLoading, refresh: refreshEvents } = useEvents();
 
   const mobileNavItems = [
     { to: '/dashboard', icon: 'grid_view', label: 'Home' },
@@ -27,24 +25,37 @@ export default function AppLayout() {
     { to: '/settings', icon: 'settings', label: 'Settings' },
   ];
 
+  // Context passed to pages via Outlet
+  const outletContext = {
+    ...wallet,
+    contract,
+    events,
+    latestEvent,
+    eventsLoading,
+    refreshEvents,
+  };
+
   return (
     <div className="min-h-screen bg-surface">
       <TopNav
-        onWalletClick={handleWalletClick}
+        onWalletClick={wallet.openModal}
         isConnected={wallet.isConnected}
+        walletName={wallet.walletName}
         truncatedAddr={wallet.truncatedAddr}
       />
       <SideNav
         isConnected={wallet.isConnected}
         truncatedAddr={wallet.truncatedAddr}
-        onConnect={wallet.connect}
+        walletName={wallet.walletName}
+        onConnect={wallet.openModal}
+        onOpenModal={wallet.openModal}
         connecting={wallet.connecting}
       />
 
       {/* Main Content — offset for sidebar + topnav */}
       <main className="md:pl-64 pt-24 pb-24 md:pb-12 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <Outlet context={wallet} />
+          <Outlet context={outletContext} />
         </div>
       </main>
 
@@ -67,13 +78,37 @@ export default function AppLayout() {
         ))}
       </nav>
 
+      {/* Wallet Selector Modal */}
+      <WalletSelectorModal
+        isOpen={wallet.modalOpen}
+        onClose={wallet.closeModal}
+        onConnect={wallet.connectWithWallet}
+        onDisconnect={() => {
+          wallet.disconnect();
+          wallet.closeModal();
+        }}
+        isConnected={wallet.isConnected}
+        walletName={wallet.walletName}
+        truncatedAddr={wallet.truncatedAddr}
+        connecting={wallet.connecting}
+        error={wallet.error}
+      />
+
+      {/* Transaction Status Panel (contract interactions) */}
+      <TransactionStatusPanel
+        status={contract.txStatus}
+        txHash={contract.txHash}
+        error={contract.error}
+        onDismiss={contract.resetState}
+      />
+
       {/* Wallet Error Toast */}
-      {wallet.error && (
+      {wallet.error && !wallet.modalOpen && (
         <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[60] bg-error-container/90 backdrop-blur-xl text-on-error-container px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 max-w-md">
           <span className="material-symbols-outlined text-error">warning</span>
           <p className="text-sm font-body">{wallet.error}</p>
           <button
-            onClick={() => wallet.connect()}
+            onClick={wallet.openModal}
             className="text-xs font-headline font-bold uppercase text-error hover:underline cursor-pointer whitespace-nowrap"
           >
             Retry

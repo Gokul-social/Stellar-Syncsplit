@@ -3,17 +3,32 @@ import { formatXLM } from '../../utils/stellar';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 
 /**
- * Compact wallet widget showing XLM balance, for use in sidebar or dashboard.
+ * Compact wallet widget showing XLM balance and active wallet info.
+ * Click to open the wallet selector modal.
  */
-export default function WalletWidget({ publicKey, isConnected }) {
+export default function WalletWidget({ publicKey, isConnected, walletName, onOpenModal }) {
   const { balance, loading, error } = useBalance(publicKey);
 
   if (!isConnected) return null;
 
   return (
-    <div className="bg-surface-container rounded-xl p-6 inner-stroke relative overflow-hidden group">
+    <div
+      className="bg-surface-container rounded-xl p-6 inner-stroke relative overflow-hidden group cursor-pointer hover:bg-surface-container-high transition-all duration-300"
+      onClick={onOpenModal}
+    >
       {/* Decorative glow */}
       <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl group-hover:bg-primary-container/20 transition-all duration-500" />
+
+      {/* Wallet Provider */}
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(78,222,162,0.6)]" />
+        <span className="text-[10px] font-headline font-black uppercase tracking-widest text-tertiary">
+          {walletName || 'Connected'}
+        </span>
+        <span className="material-symbols-outlined text-outline text-xs ml-auto group-hover:text-primary transition-colors">
+          swap_horiz
+        </span>
+      </div>
 
       <p className="font-headline text-xs uppercase tracking-widest text-outline mb-1">XLM Balance</p>
 

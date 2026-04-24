@@ -3,9 +3,9 @@ import { motion } from 'motion/react';
 
 /**
  * Fixed left sidebar navigation — desktop only (hidden on mobile → bottom nav).
- * Includes wallet widget at bottom.
+ * Includes wallet widget at bottom with wallet provider name and switch action.
  */
-export default function SideNav({ isConnected, truncatedAddr, onConnect, connecting }) {
+export default function SideNav({ isConnected, truncatedAddr, walletName, onConnect, onOpenModal, connecting }) {
   const navItems = [
     { to: '/dashboard', icon: 'grid_view', label: 'Home' },
     { to: '/wallet', icon: 'account_balance', label: 'Portfolio' },
@@ -39,7 +39,10 @@ export default function SideNav({ isConnected, truncatedAddr, onConnect, connect
       {/* Wallet Status */}
       <div className="px-6 mt-auto space-y-3">
         {isConnected ? (
-          <div className="bg-surface-container rounded-xl p-4 inner-stroke flex items-center gap-3">
+          <div
+            className="bg-surface-container rounded-xl p-4 inner-stroke flex items-center gap-3 cursor-pointer hover:bg-surface-container-high transition-all group"
+            onClick={onOpenModal}
+          >
             <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
               <span
                 className="material-symbols-outlined text-sm text-on-primary-container"
@@ -51,10 +54,13 @@ export default function SideNav({ isConnected, truncatedAddr, onConnect, connect
             <div className="flex-1 overflow-hidden">
               <p className="text-[10px] font-black uppercase text-on-surface truncate flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-tertiary" />
-                Connected
+                {walletName || 'Connected'}
               </p>
               <p className="text-[10px] text-outline font-mono truncate">{truncatedAddr}</p>
             </div>
+            <span className="material-symbols-outlined text-outline text-sm group-hover:text-primary transition-colors">
+              swap_horiz
+            </span>
           </div>
         ) : (
           <motion.button
