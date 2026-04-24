@@ -80,6 +80,11 @@ CLI           : stellar-cli v23.0.1
 
 ---
 
+## 🎬 Demo Video
+
+> 📽️ [**Watch the full demo walkthrough →**](https://drive.google.com/file/d/1JSoBAxrVnZq2nWL6ZCGpVT6uHZpy4pXK/view?usp=sharing)
+>
+> Covers: Wallet connection · Balance check · XLM transfer · Soroban contract · Split bill creation · Event tracking
 
 ---
 
