@@ -67,33 +67,25 @@ CLI           : stellar-cli v23.0.1
 <table>
   <tr>
     <td align="center"><b>Landing Page</b></td>
-    <td align="center"><b>Dashboard — Split Calculator</b></td>
+    <td align="center"><b>Split Calculator — Dashboard</b></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/45680289-b3a5-4d74-ba1e-ba7b0b441830" alt="Landing Page" width="100%"/></td>
-    <td><img src="https://github.com/user-attachments/assets/40a51082-265a-4f73-8d55-dfd2d3a1c76b" alt="Dashboard" width="100%"/></td>
+    <td><img src="./screenshots/01_landing_page.png" alt="Landing Page" width="100%"/></td>
+    <td><img src="./screenshots/02_split_calculator.png" alt="Split Calculator" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Wallet & Portfolio</b></td>
-    <td align="center"><b>Send Transaction</b></td>
+    <td align="center"><b>Transactions & Send Funds</b></td>
+    <td align="center"><b>Settings — Privacy Armor</b></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/3b697ff8-603d-496f-b5a2-d24c81025a4c" alt="Wallet Portfolio" width="100%"/></td>
-    <td><img src="https://github.com/user-attachments/assets/dc8ab198-588c-4e8a-92eb-c05e31904f77" alt="Send Transaction" width="100%"/></td>
+    <td><img src="./screenshots/03_transactions.png" alt="Transactions" width="100%"/></td>
+    <td><img src="./screenshots/04_settings.png" alt="Settings" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Transaction History</b></td>
-    <td align="center"><b>Deployed Contract — Stellar Expert</b></td>
+    <td align="center" colspan="2"><b>Receive Assets — QR Code</b></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/0d4f988f-ec3c-4094-be20-41567f064b26" alt="Transaction History" width="100%"/></td>
-    <td><img src="https://github.com/user-attachments/assets/0ce6c74d-d527-42a2-97ed-a93b4c2d4de4" alt="Deployed Contract on Stellar Expert" width="100%"/></td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2"><b>Transaction Confirmation — Stellar Expert</b></td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2"><img src="https://github.com/user-attachments/assets/7da95354-3ed9-405c-89d1-f2fe991b7418" alt="Transaction Confirmation on Stellar Expert" width="60%"/></td>
+    <td align="center" colspan="2"><img src="./screenshots/05_receive_assets.png" alt="Receive Assets QR Code" width="50%"/></td>
   </tr>
 </table>
 
