@@ -82,10 +82,12 @@ CLI           : stellar-cli v23.0.1
     <td><img src="./screenshots/04_settings.png" alt="Settings" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><b>Receive Assets — QR Code</b></td>
+    <td align="center"><b>Receive Assets — QR Code</b></td>
+    <td align="center"><b>Wallet Options — Connect Modal</b></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><img src="./screenshots/05_receive_assets.png" alt="Receive Assets QR Code" width="50%"/></td>
+    <td><img src="./screenshots/05_receive_assets.png" alt="Receive Assets QR Code" width="100%"/></td>
+    <td><img src="./screenshots/06_wallet_options.png" alt="Wallet Options" width="100%"/></td>
   </tr>
 </table>
 
