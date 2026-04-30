@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { truncateAddress, NETWORK_PASSPHRASE } from '../utils/stellar';
+import { logUserAction, logError } from '../utils/logger';
 
 /**
  * Multi-wallet hook — Freighter-first with StellarWalletsKit for other wallets.
@@ -132,6 +133,7 @@ export function useWallet() {
         setIsConnected(true);
         setWalletName('freighter');
         localStorage.setItem('syncsplit_wallet', 'freighter');
+        logUserAction({ wallet: address, action: 'wallet_connected', details: { walletId: 'freighter' } });
       } else {
         throw new Error('No address returned from Freighter. Is it set up with a Testnet account?');
       }
@@ -146,6 +148,8 @@ export function useWallet() {
   const handleConnectionError = (err, walletId) => {
     const msg = err?.message || String(err);
     console.error(`[useWallet] ${walletId} connection error:`, msg);
+
+    logError({ action: 'wallet_connect', errorType: 'wallet', message: msg, details: { walletId } });
 
     if (msg.includes('not found') || msg.includes('not installed') || msg.includes('not connected') || msg.includes('not available')) {
       setError(`${walletId} is not installed. Please install it and refresh the page.`);
@@ -167,12 +171,13 @@ export function useWallet() {
   // ─── Disconnect ─────────────────────────────────────────────────────────
 
   const disconnect = useCallback(() => {
+    logUserAction({ wallet: publicKey, action: 'wallet_disconnected' });
     setPublicKey(null);
     setWalletName(null);
     setIsConnected(false);
     setError(null);
     localStorage.removeItem('syncsplit_wallet');
-  }, []);
+  }, [publicKey]);
 
   // ─── Modal Controls ────────────────────────────────────────────────────
 

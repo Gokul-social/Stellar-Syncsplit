@@ -7,6 +7,7 @@ import {
   Memo,
 } from '@stellar/stellar-sdk';
 import { HORIZON_URL, NETWORK_PASSPHRASE } from '../utils/stellar';
+import { logTransaction, logError } from '../utils/logger';
 
 /**
  * Transaction states: idle → building → signing → submitting → success | error
@@ -129,18 +130,23 @@ export function useTransaction(signTransaction, publicKey) {
 
       setTxHash(submitData.hash);
       setStatus(STATUS.SUCCESS);
+      logTransaction({ wallet: publicKey, txHash: submitData.hash, action: 'send_xlm', details: { destination, amount, memo } });
     } catch (err) {
       const msg = err.message || 'Transaction failed';
 
       // User-friendly error mapping
       if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancelled')) {
         setError('Transaction was rejected in your wallet.');
+        logError({ wallet: publicKey, action: 'send_xlm', errorType: 'transaction', message: 'User rejected', details: { destination, amount } });
       } else if (msg.includes('op_underfunded') || msg.includes('insufficient')) {
         setError('Insufficient XLM balance for this transaction.');
+        logError({ wallet: publicKey, action: 'send_xlm', errorType: 'transaction', message: 'Insufficient balance', details: { destination, amount } });
       } else if (msg.includes('op_no_destination')) {
         setError('Destination account does not exist. It may need to be funded first.');
+        logError({ wallet: publicKey, action: 'send_xlm', errorType: 'transaction', message: 'No destination', details: { destination, amount } });
       } else {
         setError(msg);
+        logError({ wallet: publicKey, action: 'send_xlm', errorType: 'transaction', message: msg, details: { destination, amount } });
       }
 
       setStatus(STATUS.ERROR);

@@ -4,9 +4,13 @@ import TopNav from './TopNav';
 import SideNav from './SideNav';
 import WalletSelectorModal from '../wallet/WalletSelectorModal';
 import TransactionStatusPanel from '../transaction/TransactionStatusPanel';
+import OnboardingStepper from '../ui/OnboardingStepper';
+import AdminPanel from '../ui/AdminPanel';
 import { useWallet } from '../../hooks/useWallet';
 import { useContract } from '../../hooks/useContract';
 import { useEvents } from '../../hooks/useEvents';
+import { useBalance } from '../../hooks/useBalance';
+import { useTransaction } from '../../hooks/useTransaction';
 
 /**
  * App layout shell: TopNav + SideNav + content area.
@@ -17,6 +21,8 @@ export default function AppLayout() {
   const wallet = useWallet();
   const contract = useContract(wallet.publicKey, wallet.signTransaction);
   const { events, latestEvent, loading: eventsLoading, refresh: refreshEvents } = useEvents();
+  const { balance } = useBalance(wallet.publicKey);
+  const transaction = useTransaction(wallet.signTransaction, wallet.publicKey);
 
   const mobileNavItems = [
     { to: '/dashboard', icon: 'grid_view', label: 'Home' },
@@ -115,6 +121,19 @@ export default function AppLayout() {
           </button>
         </div>
       )}
+
+      {/* Onboarding Stepper */}
+      <OnboardingStepper
+        isConnected={wallet.isConnected}
+        publicKey={wallet.publicKey}
+        balance={balance}
+        contractTxHash={contract.txHash}
+        paymentTxHash={transaction.txHash}
+        onConnectClick={wallet.openModal}
+      />
+
+      {/* Admin Panel (Ctrl+Shift+L) */}
+      <AdminPanel />
     </div>
   );
 }

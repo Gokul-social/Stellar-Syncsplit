@@ -8,6 +8,7 @@ import {
   stringToScVal,
 } from '../utils/contractClient';
 import { xlmToStroops, stroopsToXlm, CONTRACT_ID } from '../utils/stellar';
+import { logTransaction, logError } from '../utils/logger';
 
 /**
  * Hook for interacting with the Split Bill smart contract.
@@ -68,12 +69,14 @@ export function useContract(publicKey, signTransaction) {
       setLastResult(result);
       setTxStatus('success');
       setLoading(false);
+      logTransaction({ wallet: publicKey, txHash: hash, action: 'create_split', details: { splitId: result, totalAmountXlm, description } });
       return result; // split ID
 
     } catch (err) {
       setError(err.message);
       setTxStatus('error');
       setLoading(false);
+      logError({ wallet: publicKey, action: 'create_split', errorType: 'contract', message: err.message, details: { totalAmountXlm, description } });
       return null;
     }
   }, [publicKey, signTransaction]);
@@ -111,12 +114,14 @@ export function useContract(publicKey, signTransaction) {
       setTxHash(hash);
       setTxStatus('success');
       setLoading(false);
+      logTransaction({ wallet: publicKey, txHash: hash, action: 'add_participant', details: { splitId, participantAddress, amountXlm } });
       return true;
 
     } catch (err) {
       setError(err.message);
       setTxStatus('error');
       setLoading(false);
+      logError({ wallet: publicKey, action: 'add_participant', errorType: 'contract', message: err.message, details: { splitId } });
       return false;
     }
   }, [publicKey, signTransaction]);
@@ -151,12 +156,14 @@ export function useContract(publicKey, signTransaction) {
       setTxHash(hash);
       setTxStatus('success');
       setLoading(false);
+      logTransaction({ wallet: publicKey, txHash: hash, action: 'mark_paid', details: { splitId, participantAddress: participantAddress || publicKey } });
       return true;
 
     } catch (err) {
       setError(err.message);
       setTxStatus('error');
       setLoading(false);
+      logError({ wallet: publicKey, action: 'mark_paid', errorType: 'contract', message: err.message, details: { splitId } });
       return false;
     }
   }, [publicKey, signTransaction]);
