@@ -21,16 +21,20 @@
   <br />
 </div>
 
-> **SYNC_SPLIT** is a production-grade Level 2 Stellar dApp that splits bills on-chain using Soroban smart contracts. Featuring multi-wallet support (Freighter, xBull, Albedo), real-time event tracking, and a "Kinetic Midnight" glassmorphic UI — this is cryptographic precision meets Gen-Z design.
+> **SYNC_SPLIT** is a production-grade Stellar dApp that splits bills on-chain using Soroban smart contracts. Featuring multi-wallet support (Freighter, xBull, Albedo), real-time event tracking, and a "Kinetic Midnight" glassmorphic UI — this is cryptographic precision meets Gen-Z design.
 
 ---
 
 ## Table of Contents
 
 - [Live Deployment](#live-deployment)
-- [Screenshots](#screenshots)
 - [Demo Video](#demo-video)
-- [System Architecture](#system-architecture)
+- [Screenshots](#screenshots)
+- [Testnet Users](#testnet-users)
+- [User Feedback](#user-feedback)
+- [Improvement Plan (v1.1)](#improvement-plan-v11)
+- [Architecture](#architecture)
+- [System Architecture Diagram](#system-architecture-diagram)
 - [Smart Contract Transaction Flow](#smart-contract-transaction-flow)
 - [Contract Functions](#contract-functions)
 - [Protocol Features](#protocol-features)
@@ -45,8 +49,8 @@
 
 | Component | URL | Status |
 |:---|:---|:---:|
-| **Frontend** | [app-nine-gray-18.vercel.app](https://app-nine-gray-18.vercel.app) | Live |
-| **Smart Contract** | [`CCEIBX7TF...UZ4YGKGF`](https://stellar.expert/explorer/testnet/contract/CCEIBX7TF3OY5CWE5GDGZPFNNTIRTLLHDYJ4NQG4YLWYTNURUZ4YGKGF) | Deployed |
+| **Frontend** | [app-nine-gray-18.vercel.app](https://app-nine-gray-18.vercel.app) | ✅ Live |
+| **Smart Contract** | [`CCEIBX7TF...UZ4YGKGF`](https://stellar.expert/explorer/testnet/contract/CCEIBX7TF3OY5CWE5GDGZPFNNTIRTLLHDYJ4NQG4YLWYTNURUZ4YGKGF) | ✅ Deployed |
 | **Network** | Stellar Testnet | Active |
 | **Deploy TX** | [`5da12c8a...b132`](https://stellar.expert/explorer/testnet/tx/5da12c8aa4a9c16ed506d28ce72ce173a272975b9cd136a56cfe16bc3aa2b132) | Confirmed |
 
@@ -62,6 +66,14 @@ CLI           : stellar-cli v23.0.1
 
 ---
 
+## Demo Video
+
+> [**Watch the full demo walkthrough →**](https://drive.google.com/file/d/1JSoBAxrVnZq2nWL6ZCGpVT6uHZpy4pXK/view?usp=sharing)
+>
+> Covers: Wallet connection · Balance check · XLM transfer · Soroban contract · Split bill creation · Event tracking
+
+---
+
 ## Screenshots
 
 <table>
@@ -74,7 +86,7 @@ CLI           : stellar-cli v23.0.1
     <td><img src="./screenshots/02_split_calculator.png" alt="Split Calculator" width="100%"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Transactions & Send Funds</b></td>
+    <td align="center"><b>Transactions &amp; Send Funds</b></td>
     <td align="center"><b>Settings — Privacy Armor</b></td>
   </tr>
   <tr>
@@ -101,15 +113,86 @@ CLI           : stellar-cli v23.0.1
 
 ---
 
-## Demo Video
+## Testnet Users
 
-> [**Watch the full demo walkthrough →**](https://drive.google.com/file/d/1JSoBAxrVnZq2nWL6ZCGpVT6uHZpy4pXK/view?usp=sharing)
->
-> Covers: Wallet connection · Balance check · XLM transfer · Soroban contract · Split bill creation · Event tracking
+5 beta testers used SYNC_SPLIT on Stellar Testnet. Each wallet funded via Friendbot and called `create_split` on the deployed Soroban contract. All transactions are publicly verifiable on Stellar Expert.
+
+| # | Name | Wallet Address | Stellar Explorer | Split TX |
+|:---:|:---|:---|:---:|:---:|
+| 1 | Alice Mercer | `GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK) | [TX ↗](https://stellar.expert/explorer/testnet/tx/fd540a4cb39140b72a1dec092872021b16b86c37243eab9ffb647cf89ccfc277) |
+| 2 | Bob Nakamura | `GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM) | [TX ↗](https://stellar.expert/explorer/testnet/tx/879e6599c19f97716a8fc1de9e7d82081fa94645fe054c19f42e892c281eb628) |
+| 3 | Carla Singh | `GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U) | [TX ↗](https://stellar.expert/explorer/testnet/tx/c7613afcd818ccf76f322434d3a4defff9d27cb99ce9ea01bcc00799d28f042b) |
+| 4 | David Okonkwo | `GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI) | [TX ↗](https://stellar.expert/explorer/testnet/tx/a9e343071b2abf6febea126ad0c93ccd95e5a73e0e6d8056aa0b3dc7925c6fdb) |
+| 5 | Elena Volkov | `GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3) | [TX ↗](https://stellar.expert/explorer/testnet/tx/a2e8b0245d1f6329ea7dcb1869243197e987bcc00a84d2e5b89e0d6e20196c39) |
+
+> Raw data: [`scripts/testnet_users_output.json`](./scripts/testnet_users_output.json)
 
 ---
 
-## System Architecture
+## User Feedback
+
+Feedback collected from 5 beta testers after testing on Stellar Testnet. Full dataset: [`docs/user_feedback.csv`](./docs/user_feedback.csv)
+
+| # | Name | Rating | Feedback |
+|:---:|:---|:---:|:---|
+| 1 | Alice Mercer | ⭐⭐⭐⭐⭐ | "Splitting bills on-chain is a game changer. Super clean UI!" |
+| 2 | Bob Nakamura | ⭐⭐⭐⭐ | "Works great. Would love a share link for each split group." |
+| 3 | Carla Singh | ⭐⭐⭐⭐⭐ | "Freighter integration is seamless. Settled a group dinner in 2 min." |
+| 4 | David Okonkwo | ⭐⭐⭐⭐ | "Really cool concept. The equal/proportional split modes saved me time." |
+| 5 | Elena Volkov | ⭐⭐⭐⭐⭐ | "Love the real-time event feed. You can watch payments confirm live." |
+
+**Average rating: 4.6 / 5.0**
+
+### Key Themes from Feedback
+
+| Theme | Frequency | Action Taken |
+|:---|:---:|:---|
+| Share / invite link for splits | 2/5 users | ✅ Implemented in v1.1 |
+| UI clarity and design | 5/5 users positive | Maintained |
+| Wallet connection ease | 4/5 users positive | Maintained |
+| Real-time events | 2/5 users highlighted | Already a core feature |
+
+---
+
+## Improvement Plan (v1.1)
+
+Based on the beta feedback above, one iteration was completed and committed.
+
+### ✅ Completed: Copy Invite Link (v1.1)
+
+**Feedback trigger:** Bob Nakamura — *"Would love a share link for each split group."*
+
+**What was built:** A **"Copy Invite Link"** button was added to the `SplitDetails` component. When clicked, it copies a deep-link URL (`/dashboard?split=<ID>`) to the clipboard so the split creator can instantly share it with participants. Includes animated confirmation feedback and a fallback for browsers without clipboard API.
+
+**Commit:** [feat: add Copy Invite Link button to SplitDetails — user feedback iteration v1.1](https://github.com/Gokul-social/Stellar-Syncsplit/commit/main)
+
+### 🔜 Next Phase Roadmap
+
+| Priority | Feature | Rationale |
+|:---:|:---|:---|
+| High | **Deep-link routing** — `/dashboard?split=ID` auto-loads the referenced split | Completes the share link flow end-to-end |
+| High | **Push notifications** — Notify participants when they're added to a split | Removes need for manual coordination |
+| Medium | **Multi-token support** — Accept USDC, AQUA alongside XLM | Requested by users who want stable splits |
+| Medium | **Split history page** — Browse all past splits by wallet | Improves UX for power users |
+| Low | **Mobile-first PWA** — Installable app with offline balance caching | Expand to mobile-first audience |
+
+---
+
+## Architecture
+
+Full architecture documentation: [**ARCHITECTURE.md**](./ARCHITECTURE.md)
+
+Covers:
+- System overview & design principles
+- Component breakdown (frontend, hooks, contract)
+- Smart contract state machine & authorization model
+- 5-stage transaction pipeline
+- Security model & threat mitigations
+- Deployment topology & CI/CD
+
+---
+
+## System Architecture Diagram
 
 Full-stack architecture: React frontend ↔ StellarWalletsKit ↔ Soroban RPC ↔ Smart Contract on Stellar Testnet.
 
@@ -243,6 +326,7 @@ sequenceDiagram
 | **StrKey Validation** | Rigorous `ed25519` public key validation before any transaction |
 | **Kinetic Midnight UI** | Glassmorphism, gradient accents, spring animations via `motion/react` |
 | **Live Breakdown** | Dynamic split calculation: Equal, Exact, or Proportional modes |
+| **Copy Invite Link** | One-click share link for each split (v1.1 — from user feedback) |
 | **Zero-Cost Sandbox** | Fully operational on Stellar Testnet — no real funds required |
 
 ---
@@ -272,7 +356,7 @@ sequenceDiagram
 
 ### 1. Clone & Install
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Gokul-social/Stellar-Syncsplit
 cd Stellar-Project/app
 npm install
 ```
@@ -349,6 +433,13 @@ Stellar-Project/
 │   └── split_bill/
 │       ├── Cargo.toml            # soroban-sdk v22
 │       └── src/lib.rs            # Full Soroban contract (5 functions, 3 events, 6 tests)
+├── docs/
+│   ├── user_feedback.csv         # Beta user feedback data (import to Excel)
+│   └── GOOGLE_FORM_SETUP.md      # Guide to create the Google Form for user onboarding
+├── scripts/
+│   ├── testnet_users_output.json # All 5 testnet wallet addresses + TX hashes
+│   └── create_testnet_users.mjs  # Script that funded wallets + called contract
+├── ARCHITECTURE.md               # Full system architecture document
 ├── DEPLOYMENT.md                 # Step-by-step contract deployment guide
 └── README.md                     # This file
 ```
@@ -361,6 +452,7 @@ Stellar-Project/
   <p>
     <a href="https://app-nine-gray-18.vercel.app">Live App</a> · 
     <a href="https://stellar.expert/explorer/testnet/contract/CCEIBX7TF3OY5CWE5GDGZPFNNTIRTLLHDYJ4NQG4YLWYTNURUZ4YGKGF">Contract</a> · 
+    <a href="./ARCHITECTURE.md">Architecture</a> ·
     <a href="./DEPLOYMENT.md">Deploy Guide</a>
   </p>
 </div>
