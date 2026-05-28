@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { truncateAddress, formatXLM } from '../../utils/stellar';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { truncateAddress, formatXLM, STELLAR_EXPERT_URL } from '../../utils/stellar';
 import GradientButton from '../ui/GradientButton';
 import LoadingSkeleton from '../ui/LoadingSkeleton';
 
@@ -13,6 +13,28 @@ export default function SplitDetails({ splitId, contract, publicKey, eventRefres
   const [split, setSplit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [markingPaid, setMarkingPaid] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  // ── User Feedback Iteration v1.1: Share Link ─────────────────────────────
+  // Based on beta tester feedback: "Would love a share link for each split group."
+  // Copies a deep-link URL so the creator can paste it to participants easily.
+  const handleCopyShareLink = useCallback(() => {
+    const url = `${window.location.origin}/dashboard?split=${splitId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      // Fallback for environments without clipboard API
+      const el = document.createElement('textarea');
+      el.value = url;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }, [splitId]);
 
   // Fetch split data
   useEffect(() => {
@@ -80,7 +102,7 @@ export default function SplitDetails({ splitId, contract, publicKey, eventRefres
       animate={{ opacity: 1, y: 0 }}
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[10px] font-headline font-black uppercase tracking-widest text-primary">
@@ -105,6 +127,41 @@ export default function SplitDetails({ splitId, contract, publicKey, eventRefres
           <p className="text-xs text-outline uppercase">XLM Total</p>
         </div>
       </div>
+
+      {/* ── v1.1 Iteration: Share Link ─────────────────────────────────── */}
+      <motion.button
+        id={`share-split-${split.id}`}
+        onClick={handleCopyShareLink}
+        className="w-full mb-5 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/60 transition-all text-sm text-primary font-semibold cursor-pointer"
+        whileTap={{ scale: 0.97 }}
+        title="Copy invite link to share with participants"
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          {copied ? (
+            <motion.span
+              key="copied"
+              className="flex items-center gap-2"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+            >
+              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+              Link Copied!
+            </motion.span>
+          ) : (
+            <motion.span
+              key="copy"
+              className="flex items-center gap-2"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+            >
+              <span className="material-symbols-outlined text-sm">share</span>
+              Copy Invite Link — Share Split #{split.id}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
 
       {/* Progress Bar */}
       <div className="mb-6">
@@ -197,11 +254,22 @@ export default function SplitDetails({ splitId, contract, publicKey, eventRefres
       </div>
 
       {/* Creator Info */}
-      <div className="mt-6 pt-4 border-t border-outline-variant/10 flex items-center gap-2">
-        <span className="material-symbols-outlined text-outline text-sm">person</span>
-        <span className="text-[10px] text-outline uppercase tracking-widest">
-          Created by {truncateAddress(split.creator, 6, 4)}
-        </span>
+      <div className="mt-6 pt-4 border-t border-outline-variant/10 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-outline text-sm">person</span>
+          <span className="text-[10px] text-outline uppercase tracking-widest">
+            Created by {truncateAddress(split.creator, 6, 4)}
+          </span>
+        </div>
+        <a
+          href={`${STELLAR_EXPERT_URL}/account/${split.creator}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] text-primary/60 hover:text-primary flex items-center gap-1 transition-colors"
+        >
+          <span className="material-symbols-outlined text-xs">open_in_new</span>
+          Explorer
+        </a>
       </div>
     </motion.div>
   );
