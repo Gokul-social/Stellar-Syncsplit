@@ -164,7 +164,7 @@ Based on the beta feedback above, one iteration was completed and committed.
 
 **What was built:** A **"Copy Invite Link"** button was added to the `SplitDetails` component. When clicked, it copies a deep-link URL (`/dashboard?split=<ID>`) to the clipboard so the split creator can instantly share it with participants. Includes animated confirmation feedback and a fallback for browsers without clipboard API.
 
-**Commit:** [feat: add Copy Invite Link button to SplitDetails — user feedback iteration v1.1](https://github.com/Gokul-social/Stellar-Syncsplit/commit/main)
+**Commit:** [feat: add Copy Invite Link button to SplitDetails — user feedback iteration v1.1](https://github.com/Gokul-social/Stellar-Syncsplit/commit/a5bcbe2)
 
 ### 🔜 Next Phase Roadmap
 
