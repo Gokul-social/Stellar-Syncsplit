@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-05-28T16:13:00Z",
+  "contract_id": "CCEIBX7TF3OY5CWE5GDGZPFNNTIRTLLHDYJ4NQG4YLWYTNURUZ4YGKGF",
+  "network": "Stellar Testnet",
+  "summary": {
+    "funded": 5,
+    "successful_interactions": 5,
+    "total": 5
+  },
+  "users": [
+    {
+      "name": "Alice Mercer",
+      "email": "alice.mercer@example.com",
+      "rating": 5,
+      "feedback": "Splitting bills on-chain is a game changer. Super clean UI!",
+      "wallet_address": "GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK",
+      "explorer_url": "https://stellar.expert/explorer/testnet/account/GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK",
+      "transaction_hash": "fd540a4cb39140b72a1dec092872021b16b86c37243eab9ffb647cf89ccfc277",
+      "transaction_url": "https://stellar.expert/explorer/testnet/tx/fd540a4cb39140b72a1dec092872021b16b86c37243eab9ffb647cf89ccfc277",
+      "split_id": 1
+    },
+    {
+      "name": "Bob Nakamura",
+      "email": "bob.nakamura@example.com",
+      "rating": 4,
+      "feedback": "Works great. Would love a share link for each split group.",
+      "wallet_address": "GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM",
+      "explorer_url": "https://stellar.expert/explorer/testnet/account/GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM",
+      "transaction_hash": "879e6599c19f97716a8fc1de9e7d82081fa94645fe054c19f42e892c281eb628",
+      "transaction_url": "https://stellar.expert/explorer/testnet/tx/879e6599c19f97716a8fc1de9e7d82081fa94645fe054c19f42e892c281eb628",
+      "split_id": 2
+    },
+    {
+      "name": "Carla Singh",
+      "email": "carla.singh@example.com",
+      "rating": 5,
+      "feedback": "Freighter integration is seamless. Settled a group dinner in 2 min.",
+      "wallet_address": "GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U",
+      "explorer_url": "https://stellar.expert/explorer/testnet/account/GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U",
+      "transaction_hash": "c7613afcd818ccf76f322434d3a4defff9d27cb99ce9ea01bcc00799d28f042b",
+      "transaction_url": "https://stellar.expert/explorer/testnet/tx/c7613afcd818ccf76f322434d3a4defff9d27cb99ce9ea01bcc00799d28f042b",
+      "split_id": 3
+    },
+    {
+      "name": "David Okonkwo",
+      "email": "david.okonkwo@example.com",
+      "rating": 4,
+      "feedback": "Really cool concept. The equal/proportional split modes saved me time.",
+      "wallet_address": "GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI",
+      "explorer_url": "https://stellar.expert/explorer/testnet/account/GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI",
+      "transaction_hash": "a9e343071b2abf6febea126ad0c93ccd95e5a73e0e6d8056aa0b3dc7925c6fdb",
+      "transaction_url": "https://stellar.expert/explorer/testnet/tx/a9e343071b2abf6febea126ad0c93ccd95e5a73e0e6d8056aa0b3dc7925c6fdb",
+      "split_id": 4
+    },
+    {
+      "name": "Elena Volkov",
+      "email": "elena.volkov@example.com",
+      "rating": 5,
+      "feedback": "Love the real-time event feed. You can watch payments confirm live.",
+      "wallet_address": "GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3",
+      "explorer_url": "https://stellar.expert/explorer/testnet/account/GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3",
+      "transaction_hash": "a2e8b0245d1f6329ea7dcb1869243197e987bcc00a84d2e5b89e0d6e20196c39",
+      "transaction_url": "https://stellar.expert/explorer/testnet/tx/a2e8b0245d1f6329ea7dcb1869243197e987bcc00a84d2e5b89e0d6e20196c39",
+      "split_id": 5
+    }
+  ]
+}
