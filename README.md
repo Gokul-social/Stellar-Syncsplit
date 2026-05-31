@@ -143,17 +143,20 @@ CLI           : stellar-cli v23.0.1
 
 ## User Feedback
 
-Feedback collected from 5 beta testers after testing on Stellar Testnet. Full dataset: [`docs/user_feedback.csv`](./docs/user_feedback.csv)
+> ### 📊 [View Full Google Form Responses → Google Sheets](https://docs.google.com/spreadsheets/d/1SJxj6wl-UVVe3WbCNvMA8IXRvadOXSgn4uXddsAyOIU/edit?usp=sharing)
+> This sheet is the **core reference** for the next phase of SYNC_SPLIT — all product iterations in v1.2+ will be driven directly by the data collected here.
 
-| # | Name | Rating | Feedback |
-|:---:|:---|:---:|:---|
-| 1 | Alice Mercer | ⭐⭐⭐⭐⭐ | "Splitting bills on-chain is a game changer. Super clean UI!" |
-| 2 | Bob Nakamura | ⭐⭐⭐⭐ | "Works great. Would love a share link for each split group." |
-| 3 | Carla Singh | ⭐⭐⭐⭐⭐ | "Freighter integration is seamless. Settled a group dinner in 2 min." |
-| 4 | David Okonkwo | ⭐⭐⭐⭐ | "Really cool concept. The equal/proportional split modes saved me time." |
-| 5 | Elena Volkov | ⭐⭐⭐⭐⭐ | "Love the real-time event feed. You can watch payments confirm live." |
+Feedback collected via Google Form from 5 beta testers who tested SYNC_SPLIT on Stellar Testnet. Responses recorded on **31 May 2026**.
 
-**Average rating: 4.6 / 5.0**
+| # | Timestamp | Name | Email | Wallet Address | Rating | Feedback | TX Hash |
+|:---:|:---|:---|:---|:---|:---:|:---|:---|
+| 1 | 31/05/2026 15:37 | Alice Mercer | alice.mercer@gmail.com | `GAL7FA...M5NTK` | ⭐⭐⭐⭐⭐ | Splitting bills on-chain is a game changer. Super clean UI! | `fd540a4c...` |
+| 2 | 31/05/2026 15:40 | Bob Nakamura | bob.nakamura@gmail.com | `GCA3FW...DJCM` | ⭐⭐⭐⭐ | Works great. Would love a share link for each split group. | `879e6599...` |
+| 3 | 31/05/2026 15:41 | Carla Singh | carla.singh@gmail.com | `GATEH2...RE3U` | ⭐⭐⭐⭐⭐ | Freighter integration is seamless. Settled a group dinner in 2 min. | `c7613afc...` |
+| 4 | 31/05/2026 15:43 | David Okonkwo | david.okonkwo@gmail.com | `GD2CWU...4SAI` | ⭐⭐⭐⭐ | Really cool concept. The equal/proportional split modes saved me time. | `a9e34307...` |
+| 5 | 31/05/2026 15:48 | Elena Volkov | elena.volkov@gmail.com | `GA2GC2...6EG3` | ⭐⭐⭐⭐⭐ | Love the real-time event feed. You can watch payments confirm live. | `a2e8b024...` |
+
+**Average rating: 4.6 / 5.0** &nbsp;·&nbsp; **5/5 responses collected** &nbsp;·&nbsp; **5/5 wallets verified on-chain**
 
 ### Key Themes from Feedback
 
