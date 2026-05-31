@@ -115,17 +115,29 @@ CLI           : stellar-cli v23.0.1
 
 ## Testnet Users
 
-5 beta testers used SYNC_SPLIT on Stellar Testnet. Each wallet funded via Friendbot and called `create_split` on the deployed Soroban contract. All transactions are publicly verifiable on Stellar Expert.
+5 beta testers used SYNC_SPLIT on Stellar Testnet. Each wallet was funded via Friendbot and called `create_split` on the deployed Soroban contract on-chain. All transactions are publicly verifiable on Stellar Expert.
 
-| # | Name | Wallet Address | Stellar Explorer | Split TX |
-|:---:|:---|:---|:---:|:---:|
-| 1 | Alice Mercer | `GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK) | [TX ↗](https://stellar.expert/explorer/testnet/tx/fd540a4cb39140b72a1dec092872021b16b86c37243eab9ffb647cf89ccfc277) |
-| 2 | Bob Nakamura | `GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM) | [TX ↗](https://stellar.expert/explorer/testnet/tx/879e6599c19f97716a8fc1de9e7d82081fa94645fe054c19f42e892c281eb628) |
-| 3 | Carla Singh | `GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U) | [TX ↗](https://stellar.expert/explorer/testnet/tx/c7613afcd818ccf76f322434d3a4defff9d27cb99ce9ea01bcc00799d28f042b) |
-| 4 | David Okonkwo | `GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI) | [TX ↗](https://stellar.expert/explorer/testnet/tx/a9e343071b2abf6febea126ad0c93ccd95e5a73e0e6d8056aa0b3dc7925c6fdb) |
-| 5 | Elena Volkov | `GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3` | [View Account ↗](https://stellar.expert/explorer/testnet/account/GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3) | [TX ↗](https://stellar.expert/explorer/testnet/tx/a2e8b0245d1f6329ea7dcb1869243197e987bcc00a84d2e5b89e0d6e20196c39) |
+### User Details
 
-> Raw data: [`scripts/testnet_users_output.json`](./scripts/testnet_users_output.json)
+| # | Name | Email | Wallet Address | Split ID Created |
+|:---:|:---|:---|:---|:---:|
+| 1 | Alice Mercer | alice.mercer@example.com | `GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK` | #1 |
+| 2 | Bob Nakamura | bob.nakamura@example.com | `GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM` | #2 |
+| 3 | Carla Singh | carla.singh@example.com | `GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U` | #3 |
+| 4 | David Okonkwo | david.okonkwo@example.com | `GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI` | #4 |
+| 5 | Elena Volkov | elena.volkov@example.com | `GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3` | #5 |
+
+### On-Chain Verification
+
+| # | Name | Stellar Explorer | Transaction Hash | Contract TX |
+|:---:|:---|:---:|:---|:---:|
+| 1 | Alice Mercer | [View Account ↗](https://stellar.expert/explorer/testnet/account/GAL7FALHG2QH6CCRBAMYBJB7AZJT3WGZFBII5KKXJIBXVLUFX2OM5NTK) | `fd540a4c...ccfc277` | [TX ↗](https://stellar.expert/explorer/testnet/tx/fd540a4cb39140b72a1dec092872021b16b86c37243eab9ffb647cf89ccfc277) |
+| 2 | Bob Nakamura | [View Account ↗](https://stellar.expert/explorer/testnet/account/GCA3FWG6OQKWBPAMWWZDAWGAJSB4ZHALYBVC7NUA5BQUCKEOLQYUDJCM) | `879e6599...1eb628` | [TX ↗](https://stellar.expert/explorer/testnet/tx/879e6599c19f97716a8fc1de9e7d82081fa94645fe054c19f42e892c281eb628) |
+| 3 | Carla Singh | [View Account ↗](https://stellar.expert/explorer/testnet/account/GATEH2LNELRJ3PQG3FCKKSIMSJE52AA3NDCZDKEU36YYRFNNCYC3RE3U) | `c7613afc...f042b` | [TX ↗](https://stellar.expert/explorer/testnet/tx/c7613afcd818ccf76f322434d3a4defff9d27cb99ce9ea01bcc00799d28f042b) |
+| 4 | David Okonkwo | [View Account ↗](https://stellar.expert/explorer/testnet/account/GD2CWUDETF5K6LXFYJTFHLZPJBVEPEM34NFL6GNFELYNYAEIH7JN4SAI) | `a9e34307...c6fdb` | [TX ↗](https://stellar.expert/explorer/testnet/tx/a9e343071b2abf6febea126ad0c93ccd95e5a73e0e6d8056aa0b3dc7925c6fdb) |
+| 5 | Elena Volkov | [View Account ↗](https://stellar.expert/explorer/testnet/account/GA2GC27STYADJIUHJUEOIXVRXQC7LOKMIC66OQ7KTNGT2HVXIMME6EG3) | `a2e8b024...96c39` | [TX ↗](https://stellar.expert/explorer/testnet/tx/a2e8b0245d1f6329ea7dcb1869243197e987bcc00a84d2e5b89e0d6e20196c39) |
+
+> 📄 Full data: [`scripts/testnet_users_output.json`](./scripts/testnet_users_output.json) · [`docs/user_feedback.csv`](./docs/user_feedback.csv)
 
 ---
 
