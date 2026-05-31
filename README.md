@@ -180,9 +180,6 @@ CLI           : stellar-cli v23.0.1
 | 29 | Carlos Mendez | `GDR26I...XFV` | [↗](https://stellar.expert/explorer/testnet/account/GDR26IEAJH5C72R7KJF5V6EMHK3VRNZX7A3LBCJNX7RR6VAUBEHD2XFV) | #38 | [↗](https://stellar.expert/explorer/testnet/tx/94cb87099724da598adba35fb8c20aba316e1f66bf2241a570cc025b28422963) |
 | 30 | Diana Kovacs | `GD4N77...XT` | [↗](https://stellar.expert/explorer/testnet/account/GD4N77VBRTM2T4HLKHXPXHMDHCIBD5MJIRWKKPXMEVV4ORLWJHH32LXT) | #39 | [↗](https://stellar.expert/explorer/testnet/tx/5c7cb280795ae2cf1f6c89032c435e8eb2ff8efeb6e51a1fca0449eb5887a6cb) |
 
-> **All 30 wallets created by [`scripts/create_30_users.mjs`](./scripts/create_30_users.mjs)**  
-> Each wallet: funded via Friendbot → called `create_split()` on contract → TX confirmed → recorded in JSON + CSV
-
 ---
 
 ## Metrics Dashboard
