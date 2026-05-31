@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage';
 import WalletPage from './pages/WalletPage';
 import TransactionsPage from './pages/TransactionsPage';
 import SettingsPage from './pages/SettingsPage';
+import MetricsPage from './pages/MetricsPage';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/transactions" element={<TransactionsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/metrics" element={<MetricsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

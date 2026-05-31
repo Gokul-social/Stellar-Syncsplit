@@ -10,6 +10,7 @@ export default function SideNav({ isConnected, truncatedAddr, walletName, onConn
     { to: '/dashboard', icon: 'grid_view', label: 'Home' },
     { to: '/wallet', icon: 'account_balance', label: 'Portfolio' },
     { to: '/transactions', icon: 'swap_horiz', label: 'Transfers' },
+    { to: '/metrics', icon: 'bar_chart', label: 'Metrics' },
     { to: '/settings', icon: 'settings', label: 'Settings' },
   ];
 
